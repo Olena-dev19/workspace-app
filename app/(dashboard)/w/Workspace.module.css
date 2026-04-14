@@ -1,0 +1,38 @@
+.container {
+  padding: 20px;
+}
+.mainPageHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.createButton {
+  padding: 10px 20px;
+  background: rgb(74, 19, 18);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.createButton:hover,
+.createButton:focus {
+  background: rgb(74, 19, 18, 0.8);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.card {
+  border: 1px solid rgb(74, 19, 18);
+  padding: 16px;
+  border-radius: 8px;
+}

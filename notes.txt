@@ -1,0 +1,121 @@
+app/
+  (auth)/
+  (dashboard)/
+
+actions/
+  workspace.ts
+  list.ts
+  item.ts
+  invite.ts
+
+lib/
+  db.ts
+  auth.ts
+  utils.ts
+
+models/
+  User.ts
+  Workspace.ts
+  List.ts
+  Item.ts
+  Invite.ts
+
+types/
+
+🟢 День 1 — Setup + DB
+
+👉 Ціль: база проекту
+
+створити Next.js app
+підключити MongoDB (mongoose)
+зробити models
+seed (1 user, 1 workspace)
+
+👉 результат:
+✔️ можеш отримати дані з БД
+
+🟢 День 2 — Auth + Middleware
+
+👉 Ціль: авторизація
+
+NextAuth або custom (я б взяв NextAuth)
+login / register
+middleware:
+if (!user) redirect("/sign-in");
+
+👉 результат:
+✔️ захищені маршрути
+
+🟢 День 3 — Workspace CRUD
+
+👉 Ціль: перший core функціонал
+
+створити workspace (Server Action)
+список workspace (Server Component)
+сторінка workspace
+
+👉 важливо:
+
+використовуй revalidateTag("workspace")
+🟢 День 4 — Invite system
+
+👉 Ціль: складна логіка
+
+генерація token
+/invite/[token]
+приєднання до workspace
+
+👉 тут ти прокачаєш:
+
+auth
+security
+server logic
+
+🟢 День 5 — Lists + Items
+
+👉 Ціль: основна логіка
+
+CRUD lists
+CRUD items
+фільтр (open/done)
+
+👉 все через:
+👉 Server Actions
+
+🟢 День 6 — Suspense + UX
+
+👉 Ціль: прокачати Next.js фічі
+
+Suspense для:
+workspace list
+items
+loading.tsx
+
+👉 зробити skeleton
+
+🟢 День 7 — Полірування
+
+👉 Ціль: вигляд як production
+
+generateMetadata
+404 / access denied
+empty states
+responsive
+
+
+🔜 9. Далі (найцікавіше)
+
+Наступний крок:
+
+👉 /w/[workspaceId]
+
+перевірка доступу 🔐
+lists
+routing
+
+💬 Якщо хочеш:
+👉 я можу наступним кроком зробити повну логіку перевірки доступу (дуже важливо для твого ТЗ)
+
+💬 Якщо хочеш — можу одразу показати як зробити
+👉 
+автоматичний login після реєстрації (дуже крута штука для портфоліо)
