@@ -1,6 +1,9 @@
 import { getServerSession } from "next-auth";
 import css from "./layout.module.css";
 import LogoutButton from "@/components/LogoutButton/LogoutButton";
+import Sidebar from "@/components/Sidebar/Sidebar";
+import { Toaster } from "react-hot-toast";
+
 export default async function DashboardLayout({
   children,
 }: {
@@ -10,13 +13,10 @@ export default async function DashboardLayout({
   const userName = session?.user?.name || session?.user?.email || "User";
   return (
     <div className={css.container}>
-      {/* Sidebar */}
+      <Toaster position="top-right" />
       <aside className={css.sidebar}>
-        <div className={css.logo}>Workspace</div>
-        <nav>
-          <div className={css.navItem}>Dashboard</div>
-          <div className={css.navItem}>Settings</div>
-        </nav>
+        <Sidebar />
+        <div className={css.settings}>Settings</div>
       </aside>
 
       {/* Main */}

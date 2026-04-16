@@ -1,35 +1,41 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import css from "./CreateWorkspaceModal.module.css";
-import { createWorkspace } from "@/actions/workspace";
+import { useState, useEffect } from "react";
+import { createList } from "@/actions/list";
+import css from "./CreateListModal.module.css";
 import toast from "react-hot-toast";
 
-export default function CreateWorkspaceModal() {
+export default function CreateListModal({
+  workspaceId,
+}: {
+  workspaceId: string;
+}) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const handleClose = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setOpen(false);
-  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     const form = e.currentTarget;
     const formData = new FormData(form);
+
     setLoading(true);
+
     try {
-      await createWorkspace(formData);
-      toast.success("Workspace created");
+      await createList(formData);
+
+      toast.success("List created");
       form.reset();
       setOpen(false);
-    } catch (error: any) {
-      toast.error(error?.message || "Failed to create workspace");
+    } catch (e: any) {
+      toast.error(e?.message || "Error");
     } finally {
       setLoading(false);
     }
+  };
+  const handleClose = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setOpen(false);
   };
 
   useEffect(() => {
@@ -46,16 +52,16 @@ export default function CreateWorkspaceModal() {
 
   return (
     <>
-      <button onClick={() => setOpen(true)}>+ Create Workspace</button>
+      <button onClick={() => setOpen(true)}>+ Create List</button>
 
       {open && (
-        <div className={css.overlay} onClick={handleClose}>
+        <div className={css.overlay} onClick={() => setOpen(false)}>
           <form
             onSubmit={handleSubmit}
             onClick={(e) => e.stopPropagation()}
             className={css.modal}
           >
-            <h2 className={css.title}>Create Workspace</h2>
+            <h2 className={css.title}>Create List</h2>
             <button
               className={css.closeBtn}
               onClick={handleClose}
@@ -63,14 +69,20 @@ export default function CreateWorkspaceModal() {
             >
               ✖
             </button>
-
             <label className={css.label}>
-              Name Workspace
-              <input name="name" placeholder="Name" className={css.input} />
+              <input type="hidden" name="workspaceId" value={workspaceId} />
             </label>
 
             <label className={css.label}>
-              Description Workspace
+              Name
+              <input
+                className={css.input}
+                name="name"
+                placeholder="List name"
+              />
+            </label>
+            <label className={css.label}>
+              Description
               <textarea
                 name="description"
                 placeholder="Description"
@@ -80,15 +92,9 @@ export default function CreateWorkspaceModal() {
               />
             </label>
 
-            {loading ? (
-              <button className={css.button} type="button" disabled>
-                Creating...
-              </button>
-            ) : (
-              <button className={css.button} type="submit">
-                Create
-              </button>
-            )}
+            <button className={css.button} type="submit" disabled={loading}>
+              {loading ? "Creating..." : "Create"}
+            </button>
           </form>
         </div>
       )}

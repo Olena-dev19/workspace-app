@@ -9,17 +9,17 @@ export async function middleware(req: any) {
     req.nextUrl.pathname.startsWith("/sign-in") ||
     req.nextUrl.pathname.startsWith("/sign-up");
 
-  if (!isAuth && req.nextUrl.pathname.startsWith("/w")) {
+  if (!isAuth && req.nextUrl.pathname.startsWith("/workspace")) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   if (isAuth && isAuthPage) {
-    return NextResponse.redirect(new URL("/w", req.url));
+    return NextResponse.redirect(new URL("/workspace", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/w/:path*", "/sign-in", "/sign-up"],
+  matcher: ["/workspace/:path*", "/sign-in", "/sign-up"],
 };

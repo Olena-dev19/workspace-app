@@ -6,24 +6,20 @@
 /* Sidebar */
 .sidebar {
   width: 240px;
-  background: rgba(227, 196, 196, 0.444);
+  background: #c8dbee;
   color: rgb(15, 1, 1);
   padding: 20px;
+  border-right: 1px solid #eee;
 }
 
-.logo {
+.settings {
   font-size: 20px;
-  font-weight: bold;
-  margin-bottom: 20px;
-}
-
-.navItem {
-  margin-top: 10px;
+  font-weight: 700;
   cursor: pointer;
   color: rgb(15, 1, 1);
 }
 
-.navItem:hover {
+.settings:hover {
   color: rgb(95, 58, 58);
 }
 

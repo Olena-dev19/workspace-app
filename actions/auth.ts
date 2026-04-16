@@ -16,5 +16,5 @@ export async function registerUser(formData: FormData) {
     throw new Error("User already exists");
   }
   await User.create({ email, password, name });
-  redirect("/w");
+  redirect("/workspace");
 }

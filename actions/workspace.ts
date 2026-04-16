@@ -1,15 +1,15 @@
 "use server";
 import { connectDB } from "@/lib/db";
 import { getServerSession } from "next-auth/next";
-import { revalidatePath } from "next/cache";
+import { revalidateTag } from "next/cache";
 import { Workspace } from "@/models/Workspace";
-import { User } from "@/models/User";
+import { getCurrentUser } from "@/lib/auth";
 
 export async function createWorkspace(formData: FormData) {
   await connectDB();
 
-  const session = await getServerSession();
-  if (!session?.user?.email) {
+  const user = await getCurrentUser();
+  if (!user) {
     throw new Error("Unauthorized");
   }
 
@@ -19,11 +19,6 @@ export async function createWorkspace(formData: FormData) {
   if (!name) {
     throw new Error("Name is required");
   }
-  const user = await User.findOne({ email: session.user.email });
-
-  if (!user) {
-    throw new Error("User not found");
-  }
 
   await Workspace.create({
     name,
@@ -32,5 +27,6 @@ export async function createWorkspace(formData: FormData) {
     members: [{ userId: user._id, role: "owner" }],
   });
 
-  revalidatePath("/w");
+  revalidateTag("workspaces", "max");
+  return { success: true };
 }

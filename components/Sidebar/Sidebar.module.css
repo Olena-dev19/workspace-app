@@ -1,0 +1,48 @@
+.logo {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.menu {
+  font-size: 20px;
+  font-weight: 700;
+  cursor: pointer;
+  color: rgb(15, 1, 1);
+}
+
+.menu:hover {
+  color: rgb(95, 58, 58);
+}
+
+.dashboard {
+  cursor: pointer;
+  margin-bottom: 10px;
+  cursor: pointer;
+  color: rgb(15, 1, 1);
+}
+
+.submenu {
+  margin-left: 10px;
+  font-weight: 700;
+  color: rgb(15, 1, 1);
+  cursor: pointer;
+}
+
+.item {
+  padding: 6px 0;
+  cursor: pointer;
+  opacity: 0.8;
+}
+
+.item:hover {
+  opacity: 1;
+}
+
+.active {
+  font-weight: bold;
+  color: rgb(95, 58, 58);
+}

@@ -1,5 +1,4 @@
 .container {
-  padding: 20px;
 }
 .mainPageHeader {
   display: flex;
@@ -35,4 +34,20 @@
   border: 1px solid rgb(74, 19, 18);
   padding: 16px;
   border-radius: 8px;
+}
+
+.emptyState {
+  margin-top: 40px;
+  text-align: center;
+  color: #888;
+}
+
+.emptyTitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.emptyHint {
+  font-size: 14px;
+  opacity: 0.7;
 }

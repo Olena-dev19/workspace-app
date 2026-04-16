@@ -1,11 +1,25 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Types, Model } from "mongoose";
 
-const ListSchema = new mongoose.Schema({
+export interface ListType {
+  _id: string;
+  workspaceId: Types.ObjectId;
+  name: string;
+  description?: string;
+  timestamps: Date;
+  creatorId: Types.ObjectId;
+}
+
+const ListSchema = new Schema<ListType>({
+  name: { type: String, required: true },
+  description: String,
   workspaceId: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: Schema.Types.ObjectId,
     ref: "Workspace",
+    required: true,
   },
-  name: String,
+  creatorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
+  timestamps: { type: Date, default: Date.now },
 });
 
-export const List = mongoose.models.List || mongoose.model("List", ListSchema);
+export const List: Model<ListType> =
+  mongoose.models.List || mongoose.model<ListType>("List", ListSchema);
