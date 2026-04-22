@@ -3,9 +3,20 @@ import { Types } from "mongoose";
 import { unstable_cache } from "next/cache";
 import { WorkspaceType } from "@/types/workspace";
 
-export async function getWorkspaceById(id: string) {
-  if (!Types.ObjectId.isValid(id)) return null;
-  return Workspace.findById(id).lean();
+export function getWorkspaceById(id: string) {
+  return unstable_cache(
+    async () => {
+      if (!Types.ObjectId.isValid(id)) return null;
+
+      return Workspace.findById(id)
+        .populate("members.userId", "name email")
+        .lean();
+    },
+    ["workspace", id],
+    {
+      tags: [`workspace-${id}`],
+    },
+  )();
 }
 
 export async function isWorkspaceMember(workspace: any, userId: string) {
@@ -21,12 +32,8 @@ export async function getUserRole(workspace: any, userId: string) {
   return member?.role;
 }
 
-export const getUserWorkspaces = unstable_cache(
-  async (userId: string) => {
-    return Workspace.find({
-      "members.userId": new Types.ObjectId(userId),
-    }).lean<WorkspaceType[]>();
-  },
-  ["workspaces"],
-  { tags: ["workspaces"] },
-);
+export async function getUserWorkspaces(userId: string) {
+  return Workspace.find({
+    "members.userId": new Types.ObjectId(userId),
+  }).lean();
+}

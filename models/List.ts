@@ -1,25 +1,36 @@
 import mongoose, { Schema, Types, Model } from "mongoose";
 
 export interface ListType {
-  _id: string;
-  workspaceId: Types.ObjectId;
+  _id: Types.ObjectId;
   name: string;
   description?: string;
-  timestamps: Date;
-  creatorId: Types.ObjectId;
+  workspaceId: Types.ObjectId;
+  createdBy: Types.ObjectId;
+  createdAt: Date;
+  updatedAt: Date;
+  tasksCount: number;
+  completedCount: number;
 }
 
-const ListSchema = new Schema<ListType>({
-  name: { type: String, required: true },
-  description: String,
-  workspaceId: {
-    type: Schema.Types.ObjectId,
-    ref: "Workspace",
-    required: true,
+const ListSchema = new Schema<ListType>(
+  {
+    name: { type: String, required: true },
+    description: String,
+    workspaceId: {
+      type: Types.ObjectId,
+      ref: "Workspace",
+      required: true,
+    },
+    createdBy: {
+      type: Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    tasksCount: Number,
+    completedCount: Number,
   },
-  creatorId: { type: Schema.Types.ObjectId, ref: "User", required: true },
-  timestamps: { type: Date, default: Date.now },
-});
+  { timestamps: true },
+);
 
 export const List: Model<ListType> =
   mongoose.models.List || mongoose.model<ListType>("List", ListSchema);

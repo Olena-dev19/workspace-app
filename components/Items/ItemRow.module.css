@@ -1,0 +1,144 @@
+.row {
+  display: grid;
+  grid-template-columns: 40px 1.8fr 2fr 120px 120px 100px 40px;
+  padding: 10px 12px;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  transition: background 0.2s ease;
+}
+
+.row:hover {
+  background: #f9fafb;
+}
+
+.row:hover .checkmark {
+  border-color: rgb(74, 19, 18);
+}
+
+.checkbox {
+  position: relative;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.checkbox input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* BOX */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border: 2px solid #e8c5c5;
+  border-radius: 4px;
+  background: white;
+  transition: all 0.2s ease;
+}
+
+/* CHECKED */
+.checkbox input:checked + .checkmark {
+  background: rgb(74, 19, 18);
+  border-color: rgb(74, 19, 18);
+}
+
+/* CHECK ICON */
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox input:checked + .checkmark::after {
+  display: block;
+}
+
+/* CHECK STYLE */
+.checkbox .checkmark::after {
+  left: 5px;
+  top: 1px;
+  width: 4px;
+  height: 8px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* TEXT */
+.done {
+  text-decoration: line-through;
+  color: #9ca3af;
+}
+
+/* STATUS */
+.openStatus {
+  background: #fef3c7;
+  color: #b45309;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  width: fit-content;
+}
+
+.doneStatus {
+  background: #dcfce7;
+  color: #166534;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  width: fit-content;
+}
+
+/* DELETE BUTTON */
+.row button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.row button:hover {
+  color: #ef4444;
+}
+.avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: rgb(74, 19, 18);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+}
+.input {
+  width: 200px;
+  border: 1px solid #e8c5c5;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 14px;
+  outline: none;
+}
+.note {
+  color: rgb(139, 96, 96);
+  font-size: 13px;
+}
+
+.note:hover {
+  color: rgb(74, 19, 18);
+}
+
+.textarea {
+  border: 1px solid #e8c5c5;
+  border-radius: 6px;
+  padding: 6px 8px;
+  font-size: 13px;
+  width: 200px;
+  resize: none;
+  outline: none;
+}

@@ -9,7 +9,10 @@ import {
 import { getListsByWorkspace } from "@/lib/lists";
 import css from "./workspace.module.css";
 import CreateListModal from "@/components/Lists/CreateListModal";
-import ListCard from "@/components/Lists/ListCard";
+import { DumpIcon } from "@/public/DumpIcon";
+import ListGrid from "@/components/Lists/ListsGrid";
+import InviteButton from "@/components/InviteButton/InviteButton";
+import WorkspaceMembers from "@/components/WorkspaceMembers/WorkspaceMembers";
 
 interface Props {
   params: Promise<{
@@ -19,8 +22,6 @@ interface Props {
 export default async function WorkspacePage({ params }: Props) {
   await connectDB();
   const { workspaceId } = await params;
-
-  // const lists = await getListsByWorkspace(workspaceId);
 
   const user = await getCurrentUser();
   if (!user) return notFound();
@@ -34,28 +35,26 @@ export default async function WorkspacePage({ params }: Props) {
   const userRole = await getUserRole(workspace, user._id.toString());
   return (
     <div>
-      <h1>{workspace.name}</h1>
-      <p>{workspace.description}</p>
-      {(userRole === "admin" || userRole === "owner") && (
-        <button>Delete workspace</button>
-      )}
-      <h2>Lists</h2>
-      <CreateListModal workspaceId={workspaceId} />
+      <h1 className={css.title}>{workspace.name}</h1>
+      <p className={css.description}>{workspace.description}</p>
+
+      <div className={css.createCont}>
+        <h2>Lists</h2>
+        <WorkspaceMembers
+          members={workspace.members}
+          workspaceId={workspaceId}
+        />
+
+        <CreateListModal workspaceId={workspaceId} />
+      </div>
+
       {lists.length === 0 ? (
-        <p>No lists yet</p>
+        <div className={css.emptyState}>
+          <p className={css.emptyTitle}>No lists yet</p>
+          <p className={css.emptyHint}>Create your first list to get started</p>
+        </div>
       ) : (
-        <ul className={css.listsGrid}>
-          {lists.map((list) => (
-            <ListCard
-              key={list._id.toString()}
-              name={list.name}
-              description={list.description}
-              createdAt={list.timestamps.toString()}
-              // userName={list.userName}
-              // userEmail={list.userEmail}
-            />
-          ))}
-        </ul>
+        <ListGrid lists={lists} userRole={userRole} workspaceId={workspaceId} />
       )}
     </div>
   );

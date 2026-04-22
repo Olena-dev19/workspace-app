@@ -1,9 +1,28 @@
-import mongoose from "mongoose";
+import mongoose, { Schema, Types, Model } from "mongoose";
+export interface ItemType {
+  _id: Types.ObjectId;
 
-const ItemSchema = new mongoose.Schema({
-  listId: { type: mongoose.Schema.Types.ObjectId, ref: "List" },
-  title: String,
-  status: { type: String, enum: ["open", "done"], default: "open" },
-});
+  name: string;
+  listId: Types.ObjectId;
+  createdBy: Types.ObjectId;
+  isDone: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  assignedTo: Types.ObjectId;
+  note: string;
+}
 
-export const Item = mongoose.models.Item || mongoose.model("Item", ItemSchema);
+const ItemSchema = new Schema<ItemType>(
+  {
+    name: { type: String, required: true },
+    listId: { type: Types.ObjectId, ref: "List", required: true },
+    isDone: { type: Boolean, default: false },
+    createdBy: { type: Types.ObjectId, required: true },
+    assignedTo: Types.ObjectId,
+    note: { type: String },
+  },
+  { timestamps: true },
+);
+
+export const Item: Model<ItemType> =
+  mongoose.models.Item || mongoose.model<ItemType>("Item", ItemSchema);

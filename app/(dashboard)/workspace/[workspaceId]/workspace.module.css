@@ -1,6 +1,51 @@
-.listsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 16px;
-  margin-top: 20px;
+.title {
+  font-size: 28px;
+  font-weight: bold;
+  margin-right: 10px;
+  text-align: center;
+  color: rgb(15, 1, 1);
+}
+
+.description {
+  font-size: 16px;
+  color: rgb(74, 19, 18);
+  text-align: center;
+  margin-top: 8px;
+}
+.deleteButton {
+  padding: 10px;
+  background: transparent;
+  color: rgb(74, 19, 18);
+  border: none;
+  border-radius: 40px;
+  cursor: pointer;
+}
+.createCont {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.createCont h2 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-right: 10px;
+  text-align: center;
+  color: rgb(15, 1, 1);
+}
+
+.emptyState {
+  margin-top: 40px;
+  text-align: center;
+  color: #888;
+}
+
+.emptyTitle {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.emptyHint {
+  font-size: 14px;
+  color: rgba(188, 184, 184, 0.821);
 }

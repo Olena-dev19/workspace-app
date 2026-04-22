@@ -7,14 +7,19 @@
   align-items: center;
   justify-content: center;
 }
-
-.modal {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  position: relative;
+.addButton {
+  padding: 10px 20px;
+  background: rgb(74, 19, 18);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
 }
+.addButton:hover,
+.addButton:focus {
+  background: rgb(74, 19, 18, 0.8);
+}
+
 .title {
   color: rgb(74, 19, 18);
   font-size: 24px;

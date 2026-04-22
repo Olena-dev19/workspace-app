@@ -1,0 +1,28 @@
+.toolbar {
+  top: 0;
+  background: #fff;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #eee;
+}
+.deleteCont {
+  background-color: transparent;
+  color: rgb(74, 19, 18);
+  cursor: pointer;
+}
+.deleteCont:hover {
+  color: rgb(74, 1, 1);
+}
+.deleteButton {
+  padding: 10px 20px;
+  background: rgb(74, 19, 18);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.deleteButton:hover,
+.deleteButton:focus {
+  background: rgb(74, 19, 18, 0.8);
+}

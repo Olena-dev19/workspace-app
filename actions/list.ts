@@ -3,8 +3,9 @@ import { connectDB } from "@/lib/db";
 import { isWorkspaceMember } from "@/lib/workspace";
 import { getCurrentUser } from "@/lib/auth";
 import { getWorkspaceById } from "@/lib/workspace";
-import { revalidateTag } from "next/cache";
+import { revalidateTag, revalidatePath } from "next/cache";
 import { List } from "@/models/List";
+import { Item } from "@/models/Item";
 
 export async function createList(formData: FormData) {
   await connectDB();
@@ -29,9 +30,30 @@ export async function createList(formData: FormData) {
     name,
     workspaceId,
     description,
-    creatorId: user._id,
+    createdBy: user._id,
   });
 
-  revalidateTag(`workspace-${workspaceId}`, "max");
+  // revalidateTag(`workspace-${workspaceId}`, "max");
+  revalidatePath(`/workspace/${workspaceId}`);
+  return { success: true };
+}
+
+export async function deleteLists(ids: string[]) {
+  await connectDB();
+
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized");
+
+  for (const id of ids) {
+    const list = await List.findById(id);
+
+    if (!list) continue;
+
+    await List.findByIdAndDelete(id);
+    await Item.deleteMany({ listId: id });
+
+    revalidatePath(`/workspace/${list.workspaceId}`);
+  }
+
   return { success: true };
 }

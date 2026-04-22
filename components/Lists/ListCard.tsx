@@ -1,13 +1,23 @@
 "use client";
+import { useRouter } from "next/navigation";
 import css from "./ListCard.module.css";
 import { useState } from "react";
 
 interface Props {
   name: string;
   description?: string;
-  createdAt: string;
+  createdAt: Date;
   userName?: string;
   userEmail?: string;
+  workspaceId: string;
+  listId: string;
+
+  tasksCount: number;
+  completedCount: number;
+
+  deleteMode?: boolean;
+  selected?: boolean;
+  onSelected?: () => void;
 }
 
 export default function ListCard({
@@ -16,24 +26,48 @@ export default function ListCard({
   createdAt,
   userName,
   userEmail,
+  tasksCount,
+  completedCount,
+  deleteMode,
+  selected,
+  workspaceId,
+  listId,
+  onSelected,
 }: Props) {
-  const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const progress =
+    tasksCount === 0 ? 0 : Math.round((completedCount / tasksCount) * 100);
   return (
-    <div className={css.card} onClick={() => setOpen((prev) => !prev)}>
+    <div
+      className={`${css.card} ${selected ? css.active : ""}`}
+      onClick={() => {
+        if (deleteMode) {
+          onSelected?.();
+        } else {
+          router.push(`/workspace/${workspaceId}/lists/${listId}`);
+        }
+      }}
+    >
+      {/* Header */}
       <div className={css.header}>
         <h2>{name}</h2>
-        <span>{new Date(createdAt).toLocaleDateString()}</span>
+        <span>
+          {new Date(createdAt).toLocaleDateString("uk-UA", {
+            day: "2-digit",
+            month: "2-digit",
+          })}
+        </span>
       </div>
-      {description && (
-        <div className={`${css.description} ${open ? css.open : ""}`}>
-          {description}
-        </div>
-      )}
-
+      {/* Tasks Count */}
+      <div className={css.task}>Tasks {tasksCount}</div>
+      <div className={css.progressBar}>
+        <div className={css.progress} style={{ width: `${progress}%` }} />
+      </div>
+      {/* Footer */}
       <div className={css.footer}>
-        {userName && (
+        {(userName || userEmail) && (
           <div className={css.avatar} title={userEmail || userName}>
-            {userName[0].toUpperCase()}
+            {(userName || userEmail)?.[0].toUpperCase()}
           </div>
         )}
       </div>

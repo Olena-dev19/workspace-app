@@ -1,0 +1,49 @@
+.addButton {
+  padding: 10px 20px;
+  background: rgb(74, 19, 18);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+.addButton:hover,
+.addButton:focus {
+  background: rgb(74, 19, 18, 0.8);
+}
+.input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  margin-top: 4px;
+  border: 1px solid #e8c5c5;
+  border-radius: 10px;
+}
+.input:focus {
+  border-color: rgb(74, 19, 18);
+  outline: none;
+}
+.button {
+  width: 100%;
+  margin-top: 10px;
+  padding: 10px;
+  background: rgb(74, 19, 18);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.button:hover,
+.button:focus {
+  background: rgb(74, 19, 18, 0.8);
+}
+.closeBtn {
+  background-color: transparent;
+  border: none;
+  position: absolute;
+  color: rgb(74, 19, 18);
+  top: 10px;
+  right: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}

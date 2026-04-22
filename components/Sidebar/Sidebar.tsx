@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import css from "./Sidebar.module.css";
 import Link from "next/link";
+import { LogoIcon } from "@/public/LogoIcon";
 
 export default function Sidebar() {
   const router = useRouter();
@@ -23,19 +24,7 @@ export default function Sidebar() {
   return (
     <aside>
       <Link href="/workspace" className={css.logo}>
-        <svg
-          xmlns="http://w3.org"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-        >
-          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
-        </svg>
+        <LogoIcon />
         Workspace
       </Link>
       <div className={css.menu} onClick={toggleMenu}>

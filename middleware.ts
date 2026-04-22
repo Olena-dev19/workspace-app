@@ -1,19 +1,32 @@
 import { getToken } from "next-auth/jwt";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function middleware(req: any) {
-  const token = await getToken({ req });
+const PUBLIC_ROUTES = ["/", "/sign-in", "/sign-up"];
+const PRIVATE_PREFIXES = ["/workspace", "/invite"];
+
+export async function middleware(req: NextRequest) {
+  const token = await getToken({
+    req,
+    secret: process.env.NEXTAUTH_SECRET,
+  });
+
+  const { pathname, search } = req.nextUrl;
 
   const isAuth = !!token;
-  const isAuthPage =
-    req.nextUrl.pathname.startsWith("/sign-in") ||
-    req.nextUrl.pathname.startsWith("/sign-up");
+  const isPublic = PUBLIC_ROUTES.includes(pathname);
+  const isPrivate = PRIVATE_PREFIXES.some((route) =>
+    pathname.startsWith(route),
+  );
 
-  if (!isAuth && req.nextUrl.pathname.startsWith("/workspace")) {
-    return NextResponse.redirect(new URL("/sign-in", req.url));
+  if (!isAuth && isPrivate) {
+    const signInUrl = new URL("/sign-in", req.url);
+
+    signInUrl.searchParams.set("callbackUrl", pathname + search);
+
+    return NextResponse.redirect(signInUrl);
   }
 
-  if (isAuth && isAuthPage) {
+  if (isAuth && (pathname === "/sign-in" || pathname === "/sign-up")) {
     return NextResponse.redirect(new URL("/workspace", req.url));
   }
 
@@ -21,5 +34,5 @@ export async function middleware(req: any) {
 }
 
 export const config = {
-  matcher: ["/workspace/:path*", "/sign-in", "/sign-up"],
+  matcher: ["/workspace/:path*", "/invite/:path*", "/sign-in", "/sign-up"],
 };

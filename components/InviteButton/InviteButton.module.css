@@ -1,0 +1,22 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.button {
+  padding: 6px 12px;
+  background: #4f46e5;
+  color: white;
+  border-radius: 6px;
+}
+
+.linkBox {
+  display: flex;
+  gap: 8px;
+}
+
+.linkBox input {
+  flex: 1;
+  padding: 6px;
+}

@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { createList } from "@/actions/list";
 import css from "./CreateListModal.module.css";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
+import Modal from "../Modal/Modal";
 
 export default function CreateListModal({
   workspaceId,
@@ -12,6 +14,7 @@ export default function CreateListModal({
 }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ export default function CreateListModal({
     try {
       await createList(formData);
 
+      router.refresh();
       toast.success("List created");
       form.reset();
       setOpen(false);
@@ -38,29 +42,15 @@ export default function CreateListModal({
     setOpen(false);
   };
 
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-      }
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
-  }, []);
-
   return (
     <>
-      <button onClick={() => setOpen(true)}>+ Create List</button>
+      <button className={css.addButton} onClick={() => setOpen(true)}>
+        + Create List
+      </button>
 
       {open && (
-        <div className={css.overlay} onClick={() => setOpen(false)}>
-          <form
-            onSubmit={handleSubmit}
-            onClick={(e) => e.stopPropagation()}
-            className={css.modal}
-          >
+        <Modal onClose={() => setOpen(false)}>
+          <form onSubmit={handleSubmit} className={css.modal}>
             <h2 className={css.title}>Create List</h2>
             <button
               className={css.closeBtn}
@@ -96,7 +86,7 @@ export default function CreateListModal({
               {loading ? "Creating..." : "Create"}
             </button>
           </form>
-        </div>
+        </Modal>
       )}
     </>
   );

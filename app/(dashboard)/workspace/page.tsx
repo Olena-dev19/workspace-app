@@ -1,13 +1,10 @@
+export const dynamic = "force-dynamic";
 import { connectDB } from "@/lib/db";
-
-import { User } from "@/models/User";
-import { getServerSession } from "next-auth";
 import CreateWorkspaceModal from "@/components/CreateWorkspaceModal/CreateWorkspaceModal";
 import css from "./Workspace.module.css";
-
-import Link from "next/link";
-
 import { getUserWorkspaces } from "@/lib/workspace";
+import WorkspaceGrid from "@/components/WorkspaceGrid/WorkspaceGrid";
+import { getCurrentUser } from "@/lib/auth";
 
 interface Props {
   searchParams: Promise<{
@@ -18,31 +15,33 @@ interface Props {
 export default async function Page({ searchParams }: Props) {
   await connectDB();
   const { filter } = await searchParams;
-  const session = await getServerSession();
-
-  const user = await User.findOne({
-    email: session?.user?.email,
-  });
-
+  const user = await getCurrentUser();
   if (!user) return <div>No user</div>;
 
   const workspaces = await getUserWorkspaces(user._id.toString());
 
-  let filtered = workspaces;
+  const workspacesWithRole = workspaces.map((w) => {
+    const member = w.members.find(
+      (m) => m.userId.toString() === user._id.toString(),
+    );
+    return { ...w, role: member?.role || "member" };
+  });
+
+  let filtered = workspacesWithRole;
   if (filter === "my") {
-    filtered = workspaces.filter(
+    filtered = workspacesWithRole.filter(
       (w) => w.ownerId.toString() === user._id.toString(),
     );
   }
   if (filter === "joint") {
-    filtered = workspaces.filter((w) => w.members.length > 1);
+    filtered = workspacesWithRole.filter((w) => w.members.length > 1);
   }
 
   return (
     <div className={css.container}>
       <div className={css.mainPageHeader}>
         <h1 className={css.title}>
-          {filter === "my" ? "My " : filter === "joint" ? "Joint" : "All"}
+          {filter === "my" ? "My " : filter === "joint" ? "Joint " : "All "}
           Workspaces
         </h1>
         <a className={css.createButton}>
@@ -57,18 +56,7 @@ export default async function Page({ searchParams }: Props) {
           </p>
         </div>
       ) : (
-        <div className={css.grid}>
-          {filtered.map((w) => (
-            <Link
-              key={w._id.toString()}
-              href={`/workspace/${w._id}`}
-              className={css.card}
-            >
-              <h2>{w.name}</h2>
-              <p>{w.description}</p>
-            </Link>
-          ))}
-        </div>
+        <WorkspaceGrid workspaces={filtered} userId={user._id.toString()} />
       )}
     </div>
   );

@@ -8,13 +8,6 @@
   justify-content: center;
 }
 
-.modal {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  width: 400px;
-  position: relative;
-}
 .title {
   color: rgb(74, 19, 18);
   font-size: 24px;

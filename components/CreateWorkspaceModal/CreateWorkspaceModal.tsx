@@ -4,15 +4,13 @@ import { useEffect, useState } from "react";
 import css from "./CreateWorkspaceModal.module.css";
 import { createWorkspace } from "@/actions/workspace";
 import toast from "react-hot-toast";
+import Modal from "../Modal/Modal";
+import { useRouter } from "next/navigation";
 
 export default function CreateWorkspaceModal() {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const handleClose = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setOpen(false);
-  };
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +20,7 @@ export default function CreateWorkspaceModal() {
     setLoading(true);
     try {
       await createWorkspace(formData);
+      router.refresh();
       toast.success("Workspace created");
       form.reset();
       setOpen(false);
@@ -32,33 +31,17 @@ export default function CreateWorkspaceModal() {
     }
   };
 
-  useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setOpen(false);
-      }
-    };
-    window.addEventListener("keydown", handleEsc);
-    return () => {
-      window.removeEventListener("keydown", handleEsc);
-    };
-  }, []);
-
   return (
     <>
       <button onClick={() => setOpen(true)}>+ Create Workspace</button>
 
       {open && (
-        <div className={css.overlay} onClick={handleClose}>
-          <form
-            onSubmit={handleSubmit}
-            onClick={(e) => e.stopPropagation()}
-            className={css.modal}
-          >
+        <Modal onClose={() => setOpen(false)}>
+          <form onSubmit={handleSubmit} className={css.modal}>
             <h2 className={css.title}>Create Workspace</h2>
             <button
               className={css.closeBtn}
-              onClick={handleClose}
+              onClick={() => setOpen(false)}
               type="button"
             >
               ✖
@@ -90,7 +73,7 @@ export default function CreateWorkspaceModal() {
               </button>
             )}
           </form>
-        </div>
+        </Modal>
       )}
     </>
   );

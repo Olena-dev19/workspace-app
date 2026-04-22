@@ -1,0 +1,23 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.active {
+  border: 2px solid #0070f3;
+  background: #f0f8ff;
+}
+
+.card {
+  border: 1px solid rgb(74, 19, 18);
+  padding: 16px;
+  border-radius: 8px;
+
+  transition: all 0.2s ease;
+}
+.card:hover {
+  border-color: #ccc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}

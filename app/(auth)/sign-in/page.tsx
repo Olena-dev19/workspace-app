@@ -3,8 +3,11 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import css from "./SignIn.module.css";
+import { useSearchParams } from "next/navigation";
 
 export default function SignIn() {
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/workspace";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -13,7 +16,7 @@ export default function SignIn() {
     await signIn("credentials", {
       email,
       password,
-      callbackUrl: "/workspace",
+      callbackUrl,
     });
   };
 
