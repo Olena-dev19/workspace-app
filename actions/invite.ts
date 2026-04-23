@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/lib/auth";
 import { Invite } from "@/models/Invite";
 import { getWorkspaceById, getUserRole } from "@/lib/workspace";
 import crypto from "crypto";
+import { Workspace } from "@/models/Workspace";
 
 export async function createInvite(workspaceId: string) {
   await connectDB();
@@ -12,7 +13,7 @@ export async function createInvite(workspaceId: string) {
   const user = await getCurrentUser();
   if (!user) throw new Error("Unauthorized");
 
-  const workspace = await getWorkspaceById(workspaceId);
+  const workspace = await Workspace.findById(workspaceId);
   if (!workspace) throw new Error("Workspace not found");
 
   const role = await getUserRole(workspace, user._id.toString());

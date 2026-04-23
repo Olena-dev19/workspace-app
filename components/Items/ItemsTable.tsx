@@ -3,7 +3,7 @@
 import ItemRow from "./ItemRow";
 import css from "./ItemsTable.module.css";
 
-export default function ItemsTable({ items, user }: any) {
+export default function ItemsTable({ items }: any) {
   return (
     <div className={css.table}>
       {/* HEADER */}
@@ -19,7 +19,7 @@ export default function ItemsTable({ items, user }: any) {
 
       {/* ROWS */}
       {items.map((item: any) => (
-        <ItemRow key={item._id} item={item} user={user} />
+        <ItemRow key={item._id} item={item} />
       ))}
     </div>
   );

@@ -18,10 +18,10 @@ export async function createItem(formData: FormData) {
   const name = formData.get("name")?.toString();
   const listId = formData.get("listId")?.toString();
 
+  if (!name || !listId) throw new Error('("Missing fields"');
+
   const list = await getListById(listId);
   if (!list) throw new Error("List not found");
-
-  if (!name || !listId) throw new Error('("Missing fields"');
 
   await Item.create({
     name,

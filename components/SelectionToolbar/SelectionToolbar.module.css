@@ -26,3 +26,9 @@
 .deleteButton:focus {
   background: rgb(74, 19, 18, 0.8);
 }
+
+.cancelButton {
+  border: 1px solid rgb(74, 19, 18);
+  padding: 10px 10px;
+  border-radius: 10px;
+}

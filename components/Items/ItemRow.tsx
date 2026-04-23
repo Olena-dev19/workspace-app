@@ -3,9 +3,8 @@
 import { deleteItem, toggleItem, updateItem } from "@/actions/item";
 import css from "./ItemRow.module.css";
 import { useState, useTransition } from "react";
-import { getCurrentUser } from "@/lib/auth";
 
-export default function ItemRow({ item, user }: any) {
+export default function ItemRow({ item }: any) {
   const [isDone, setIsDone] = useState(item.isDone);
   const [isPending, startTransition] = useTransition();
 
@@ -17,8 +16,7 @@ export default function ItemRow({ item, user }: any) {
     name: item.name,
     note: item.note || "",
   });
-
-  // ✅ TOGGLE (optimistic)
+  const author = item.createdBy;
   const handleToggle = () => {
     const newValue = !isDone;
     setIsDone(newValue);
@@ -32,7 +30,6 @@ export default function ItemRow({ item, user }: any) {
     });
   };
 
-  // ✅ CHANGE
   const handleChange = (field: "name" | "note", value: string) => {
     setForm((prev) => ({
       ...prev,
@@ -40,7 +37,6 @@ export default function ItemRow({ item, user }: any) {
     }));
   };
 
-  // ✅ SAVE
   const handleSave = (field: "name" | "note") => {
     const value = form[field];
 
@@ -118,8 +114,8 @@ export default function ItemRow({ item, user }: any) {
       </span>
 
       {/* AVATAR */}
-      <div className={css.avatar} title={user?.email || user?.name}>
-        {(user?.name || user?.email)?.[0]?.toUpperCase()}
+      <div className={css.avatar} title={author?.email || author?.name}>
+        {(author?.name || author?.email)?.[0]?.toUpperCase()}
       </div>
 
       {/* DATE */}

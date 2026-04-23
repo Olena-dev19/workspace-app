@@ -33,7 +33,6 @@ export async function createList(formData: FormData) {
     createdBy: user._id,
   });
 
-  // revalidateTag(`workspace-${workspaceId}`, "max");
   revalidatePath(`/workspace/${workspaceId}`);
   return { success: true };
 }

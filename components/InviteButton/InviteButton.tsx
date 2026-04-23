@@ -1,41 +1,10 @@
-// "use client";
-
-// import { createInvite } from "@/actions/invite";
-// import { useState } from "react";
-// import css from "./InviteButton.module.css";
-
-// export default function InviteButton({ workspaceId }: any) {
-//   const [link, setLink] = useState("");
-
-//   const handleCreate = async () => {
-//     const res = await createInvite(workspaceId);
-//     setLink(res.link);
-//   };
-
-//   const copy = async () => {
-//     await navigator.clipboard.writeText(link);
-//     alert("Copied!");
-//   };
-
-//   return (
-//     <div className={css.container}>
-//       <button onClick={handleCreate} className={css.button}>
-//         Invite
-//       </button>
-
-//       {link && (
-//         <div className={css.linkBox}>
-//           <input value={link} readOnly />
-//           <button onClick={copy}>Copy</button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// }
 "use client";
 
+import { AddUser } from "@/public/AddUser";
 import { useState } from "react";
 import toast from "react-hot-toast";
+import { createInvite } from "@/actions/invite";
+import css from "./InviteButton.module.css";
 
 export default function InviteButton({ workspaceId }: any) {
   const [loading, setLoading] = useState(false);
@@ -44,26 +13,25 @@ export default function InviteButton({ workspaceId }: any) {
     setLoading(true);
 
     try {
-      const res = await fetch(`/api/invite`, {
-        method: "POST",
-        body: JSON.stringify({ workspaceId }),
-      });
+      const data = await createInvite(workspaceId);
 
-      const data = await res.json();
-
-      await navigator.clipboard.writeText(data.link);
-
-      toast.success("Link copied 🔗");
-    } catch {
-      toast.error("Failed to copy link");
+      try {
+        await navigator.clipboard.writeText(data.link);
+        toast.success("Link copied 🔗");
+      } catch {
+        prompt("Copy your invite link:", data.link);
+      }
+    } catch (e: any) {
+      console.error(e);
+      toast.error(e?.message || "Error");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <button onClick={handleInvite} disabled={loading}>
-      +
+    <button className={css.button} onClick={handleInvite} disabled={loading}>
+      <AddUser />
     </button>
   );
 }

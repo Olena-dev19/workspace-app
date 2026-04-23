@@ -9,9 +9,9 @@ import {
 import { getListsByWorkspace } from "@/lib/lists";
 import css from "./workspace.module.css";
 import CreateListModal from "@/components/Lists/CreateListModal";
-import { DumpIcon } from "@/public/DumpIcon";
+
 import ListGrid from "@/components/Lists/ListsGrid";
-import InviteButton from "@/components/InviteButton/InviteButton";
+
 import WorkspaceMembers from "@/components/WorkspaceMembers/WorkspaceMembers";
 
 interface Props {
@@ -39,7 +39,6 @@ export default async function WorkspacePage({ params }: Props) {
       <p className={css.description}>{workspace.description}</p>
 
       <div className={css.createCont}>
-        <h2>Lists</h2>
         <WorkspaceMembers
           members={workspace.members}
           workspaceId={workspaceId}

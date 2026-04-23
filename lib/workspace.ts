@@ -21,14 +21,15 @@ export function getWorkspaceById(id: string) {
 
 export async function isWorkspaceMember(workspace: any, userId: string) {
   return workspace.members.some(
-    (member: any) => member.userId.toString() === userId.toString(),
+    (member: any) => member.userId?._id?.toString() === userId.toString(),
   );
 }
 
 export async function getUserRole(workspace: any, userId: string) {
   const member = workspace.members.find(
-    (member: any) => member.userId.toString() === userId.toString(),
+    (member: any) => member.userId?._id?.toString() === userId.toString(),
   );
+
   return member?.role;
 }
 

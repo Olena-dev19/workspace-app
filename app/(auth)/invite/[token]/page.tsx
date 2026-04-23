@@ -3,6 +3,7 @@ import { Invite } from "@/models/Invite";
 import { Workspace } from "@/models/Workspace";
 import { redirect } from "next/navigation";
 import { getCurrentUser } from "@/lib/auth";
+import { revalidateTag } from "next/cache";
 
 export default async function InvitePage({ params }: any) {
   await connectDB();
@@ -23,18 +24,26 @@ export default async function InvitePage({ params }: any) {
     return <div>Invite expired</div>;
   }
 
-  await Workspace.findByIdAndUpdate(invite.workspaceId, {
-    $addToSet: {
-      members: {
-        userId: user._id,
-        role: "member",
-      },
-    },
+  const workspace = await Workspace.findById(invite.workspaceId);
+
+  if (!workspace) {
+    return <div>Workspace not found</div>;
+  }
+
+  const alreadyMember = workspace.members.some(
+    (m: any) => m.userId.toString() === user._id.toString(),
+  );
+
+  if (alreadyMember) {
+    return redirect(`/workspace/${invite.workspaceId}`);
+  }
+
+  workspace.members.push({
+    userId: user._id,
+    role: "member",
   });
 
-  invite.uses = (invite.uses || 0) + 1;
-
-  await invite.save();
-
+  await workspace.save();
+  revalidateTag(`workspace-${invite.workspaceId.toString()}`, "max");
   return redirect(`/workspace/${invite.workspaceId}`);
 }

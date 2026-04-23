@@ -6,7 +6,14 @@ import ItemsTable from "./ItemsTable";
 import ItemsToolbar from "./ItemsToolbar";
 import WorkspaceMembers from "../WorkspaceMembers/WorkspaceMembers";
 
-export default function ItemsPage({ items, list, listId, user }: any) {
+export default function ItemsPage({
+  items,
+  list,
+  listId,
+  user,
+  workspaceId,
+  workspace,
+}: any) {
   const [filter, setFilter] = useState<"all" | "open" | "done">("all");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"newest" | "oldest">("newest");
@@ -46,10 +53,10 @@ export default function ItemsPage({ items, list, listId, user }: any) {
       <div className={css.header}>
         <h1>{list.name}</h1>
         <p>{list.description}</p>
-        {/* <WorkspaceMembers
-                  members={workspace.members}
-                  workspaceId={workspaceId}
-                /> */}
+        <WorkspaceMembers
+          members={workspace.members}
+          workspaceId={workspaceId}
+        />
       </div>
 
       {/* TOOLBAR */}

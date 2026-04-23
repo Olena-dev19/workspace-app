@@ -17,7 +17,7 @@ const ItemSchema = new Schema<ItemType>(
     name: { type: String, required: true },
     listId: { type: Types.ObjectId, ref: "List", required: true },
     isDone: { type: Boolean, default: false },
-    createdBy: { type: Types.ObjectId, required: true },
+    createdBy: { type: Types.ObjectId, required: true, ref: "User" },
     assignedTo: Types.ObjectId,
     note: { type: String },
   },

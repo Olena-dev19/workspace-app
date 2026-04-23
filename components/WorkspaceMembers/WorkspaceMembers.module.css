@@ -1,18 +1,29 @@
 .wrapper {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 2px;
 }
 
 .avatar {
   width: 32px;
   height: 32px;
   border-radius: 50%;
-  background: #444;
+  background-color: rgb(74, 19, 18, 0.8);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
   cursor: pointer;
+  margin-left: -8px;
+}
+
+.avatar:hover,
+.avatar:focus {
+  background-color: transparent;
+  color: rgb(74, 19, 18);
+  border: 2px solid rgb(74, 19, 18);
+}
+.avatar:first-of-type {
+  margin-left: 5px;
 }
