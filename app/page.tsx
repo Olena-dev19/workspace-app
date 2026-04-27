@@ -1,5 +1,5 @@
 import { connectDB } from "@/lib/db";
-import SignIn from "./(auth)/sign-in/page";
+import SignIn from "./(auth)/sign-in/SignIn";
 
 export default async function Home() {
   await connectDB();
