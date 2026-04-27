@@ -3,13 +3,12 @@ import { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import css from "./SignIn.module.css";
-import { useSearchParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { Eye } from "@/public/Eye";
 import { EyeOff } from "@/public/EyeOff";
 
-export default function SignIn() {
-  const searchParams = useSearchParams();
+export default function SignIn({ searchParams }: any) {
   const callbackUrl = searchParams.get("callbackUrl") || "/workspace";
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
