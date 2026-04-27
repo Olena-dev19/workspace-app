@@ -46,7 +46,7 @@ export default function ListGrid({ lists, userRole, workspaceId }: any) {
       <div className={css.listsGrid}>
         {lists.map((list: any) => (
           <ListCard
-            key={list._id}
+            key={list.id}
             name={list.name}
             description={list.description}
             createdAt={list.createdAt}
@@ -55,9 +55,9 @@ export default function ListGrid({ lists, userRole, workspaceId }: any) {
             tasksCount={list.tasksCount}
             completedCount={list.completedCount}
             deleteMode={deleteMode}
-            selected={selected.includes(list._id.toString())}
-            onSelected={() => toggle(list._id.toString())}
-            listId={list._id.toString()}
+            selected={selected.includes(list.id.toString())}
+            onSelected={() => toggle(list.id.toString())}
+            listId={list.id.toString()}
             workspaceId={workspaceId}
           />
         ))}

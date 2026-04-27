@@ -26,7 +26,7 @@ export async function createItem(formData: FormData) {
   await Item.create({
     name,
     listId,
-    createdBy: user._id,
+    createdBy: user.id,
   });
 
   revalidatePath(`/workspace/${list.workspaceId}/lists/${listId}`);
@@ -47,7 +47,7 @@ export async function toggleItem(id: string) {
   const workspace = await getWorkspaceById(list.workspaceId.toString());
   if (!workspace) throw new Error("Workspace not found");
 
-  const isMember = await isWorkspaceMember(workspace, user._id.toString());
+  const isMember = isWorkspaceMember(workspace, user.id.toString());
   if (!isMember) throw new Error("Forbidden");
 
   item.isDone = !item.isDone;
@@ -58,6 +58,9 @@ export async function toggleItem(id: string) {
 
 export async function deleteItem(id: string) {
   await connectDB();
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized");
+
   const item = await Item.findById(id);
   if (!item) return;
 
@@ -70,11 +73,15 @@ export async function deleteItem(id: string) {
   await Item.findByIdAndDelete(id);
   revalidatePath(`/workspace/${list.workspaceId}/lists/${item.listId}`);
 }
+
 export async function updateItem(
   itemId: string,
   data: { name?: string; note?: string },
 ) {
   await connectDB();
+  const user = await getCurrentUser();
+  if (!user) throw new Error("Unauthorized");
+
   const updated = await Item.findByIdAndUpdate(
     itemId,
     { ...data },

@@ -1,0 +1,23 @@
+.table {
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.rowHeader {
+  display: grid;
+
+  grid-template-columns: 40px 2fr 2fr 120px 120px 40px;
+  align-items: center;
+  padding: 10px 12px;
+  background: #f9fafb;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.rowHeader span {
+  display: flex;
+  align-items: center;
+}

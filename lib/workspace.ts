@@ -1,16 +1,26 @@
 import { Workspace } from "@/models/Workspace";
 import { Types } from "mongoose";
 import { unstable_cache } from "next/cache";
-import { WorkspaceType } from "@/types/workspace";
 
-export function getWorkspaceById(id: string) {
+import { WorkspaceDB } from "@/types/db/workspace";
+import { mapWorkspace } from "./mappers/workspace.mapper";
+import { WorkspaceDTO } from "@/types/dto/workspace.dto";
+import { Role } from "@/types/workspace";
+
+export async function getWorkspaceById(
+  id: string,
+): Promise<WorkspaceDTO | null> {
+  if (!Types.ObjectId.isValid(id)) {
+    return null;
+  }
+
   return unstable_cache(
     async () => {
-      if (!Types.ObjectId.isValid(id)) return null;
-
-      return Workspace.findById(id)
+      const workspace = await Workspace.findById(id)
         .populate("members.userId", "name email")
-        .lean();
+        .lean<WorkspaceDB>();
+
+      return workspace ? mapWorkspace(workspace) : null;
     },
     ["workspace", id],
     {
@@ -19,22 +29,32 @@ export function getWorkspaceById(id: string) {
   )();
 }
 
-export async function isWorkspaceMember(workspace: any, userId: string) {
-  return workspace.members.some(
-    (member: any) => member.userId?._id?.toString() === userId.toString(),
+export function isWorkspaceMember(
+  workspace: WorkspaceDTO,
+  userId: string,
+): boolean {
+  return workspace.members.some((member) => member.user.id === userId);
+}
+
+export function getUserRole(
+  workspace: WorkspaceDTO,
+  userId: string,
+): Role | null {
+  return (
+    workspace.members.find((member) => member.user.id === userId)?.role ?? null
   );
 }
 
-export async function getUserRole(workspace: any, userId: string) {
-  const member = workspace.members.find(
-    (member: any) => member.userId?._id?.toString() === userId.toString(),
-  );
+export const getUserWorkspaces = async (userId: string) => {
+  return unstable_cache(
+    async () => {
+      const workspaces = await Workspace.find({
+        "members.userId": new Types.ObjectId(userId),
+      }).lean<WorkspaceDB[]>();
 
-  return member?.role;
-}
-
-export async function getUserWorkspaces(userId: string) {
-  return Workspace.find({
-    "members.userId": new Types.ObjectId(userId),
-  }).lean();
-}
+      return workspaces.map(mapWorkspace);
+    },
+    ["user-workspaces", userId],
+    { tags: [`user-workspaces-${userId}`] },
+  )();
+};

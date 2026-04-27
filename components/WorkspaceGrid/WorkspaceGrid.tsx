@@ -9,8 +9,13 @@ import toast from "react-hot-toast";
 
 import { useState } from "react";
 import SelectionToolbar from "../SelectionToolbar/SelectionToolbar";
+import { WorkspaceDTO } from "@/types/dto/workspace.dto";
 
-export default function WorkspaceGrid({ workspaces, userId }: any) {
+interface Props {
+  workspaces: WorkspaceDTO[];
+}
+
+export default function WorkspaceGrid({ workspaces }: Props) {
   const { selected, toggle, clear } = useSelection();
   const [deleteMode, setDeleteMode] = useState(false);
   const router = useRouter();
@@ -42,18 +47,18 @@ export default function WorkspaceGrid({ workspaces, userId }: any) {
 
       {/* GRID */}
       <div className={css.grid}>
-        {workspaces.map((w: any) => (
+        {workspaces.map((w: WorkspaceDTO) => (
           <div
-            key={w._id}
+            key={w.id}
             className={`${css.card} ${
-              selected.includes(w._id.toString()) ? css.active : ""
+              selected.includes(w.id.toString()) ? css.active : ""
             }`}
             onClick={(e) => {
               if (deleteMode) {
                 e.preventDefault();
-                if (canDelete(w)) toggle(w._id);
+                if (canDelete(w)) toggle(w.id);
               } else {
-                router.push(`/workspace/${w._id}`);
+                router.push(`/workspace/${w.id}`);
               }
             }}
           >

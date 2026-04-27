@@ -3,10 +3,15 @@
 import { deleteItem, toggleItem, updateItem } from "@/actions/item";
 import css from "./ItemRow.module.css";
 import { useState, useTransition } from "react";
+import { ItemDTO } from "@/types/dto/item.dto";
 
-export default function ItemRow({ item }: any) {
+interface Props {
+  item: ItemDTO;
+}
+
+export default function ItemRow({ item }: Props) {
   const [isDone, setIsDone] = useState(item.isDone);
-  const [isPending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
 
   const [editingField, setEditingField] = useState<"name" | "note" | null>(
     null,
@@ -23,7 +28,7 @@ export default function ItemRow({ item }: any) {
 
     startTransition(async () => {
       try {
-        await toggleItem(item._id);
+        await toggleItem(item.id);
       } catch {
         setIsDone(!newValue);
       }
@@ -47,7 +52,7 @@ export default function ItemRow({ item }: any) {
 
     startTransition(async () => {
       try {
-        await updateItem(item._id, {
+        await updateItem(item.id, {
           [field]: value,
         });
       } catch {
@@ -122,7 +127,7 @@ export default function ItemRow({ item }: any) {
       <span>{new Date(item.createdAt).toLocaleDateString("uk-UA")}</span>
 
       {/* DELETE */}
-      <button onClick={() => deleteItem(item._id)}>✖</button>
+      <button onClick={() => deleteItem(item.id)}>✖</button>
     </div>
   );
 }

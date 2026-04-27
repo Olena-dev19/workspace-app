@@ -9,10 +9,25 @@ import {
 import { getListsByWorkspace } from "@/lib/lists";
 import css from "./workspace.module.css";
 import CreateListModal from "@/components/Lists/CreateListModal";
-
 import ListGrid from "@/components/Lists/ListsGrid";
-
 import WorkspaceMembers from "@/components/WorkspaceMembers/WorkspaceMembers";
+import Link from "next/link";
+import SettingsIcon from "@/public/SettingsIcon";
+import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
+import React, { Suspense } from "react";
+import WorkspaceMembersSkeleton from "@/components/Skeletons/WorkspaceMembersSkeleton";
+import { LeaveWorkspaceBtn } from "@/components/Lists/LeaveWorkspaceBtn";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: { workspaceId: string };
+}) {
+  const { workspaceId } = await params;
+  const ws = await getWorkspaceById(workspaceId);
+  if (!ws) return { title: "Workspace", description: "" };
+  return { title: ws.name, description: ws.description ?? "" };
+}
 
 interface Props {
   params: Promise<{
@@ -28,25 +43,45 @@ export default async function WorkspacePage({ params }: Props) {
 
   const workspace = await getWorkspaceById(workspaceId);
   if (!workspace) return notFound();
+
   const lists = await getListsByWorkspace(workspaceId);
-  const isMember = isWorkspaceMember(workspace, user._id.toString());
+
+  const isMember = isWorkspaceMember(workspace, user.id.toString());
   if (!isMember) return notFound();
 
-  const userRole = await getUserRole(workspace, user._id.toString());
+  const userRole = await getUserRole(workspace, user.id.toString());
+
+  const canEdit = userRole === "owner" || userRole === "admin";
+
   return (
     <div>
+      <div className={css.wrapper}>
+        <Breadcrumbs workspaceId={workspaceId} />
+        <div className={css.editsWrapper}>
+          {canEdit && (
+            <Link
+              href={`/workspace/${workspaceId}/settings`}
+              className={css.settingsButton}
+            >
+              <SettingsIcon />
+            </Link>
+          )}
+          <LeaveWorkspaceBtn userRole={userRole} workspaceId={workspace.id} />
+        </div>
+      </div>
       <h1 className={css.title}>{workspace.name}</h1>
       <p className={css.description}>{workspace.description}</p>
-
       <div className={css.createCont}>
-        <WorkspaceMembers
-          members={workspace.members}
-          workspaceId={workspaceId}
-        />
+        <Suspense fallback={<WorkspaceMembersSkeleton />}>
+          <WorkspaceMembers
+            members={workspace.members}
+            workspaceId={workspaceId}
+            userRole={userRole}
+          />
+        </Suspense>
 
         <CreateListModal workspaceId={workspaceId} />
       </div>
-
       {lists.length === 0 ? (
         <div className={css.emptyState}>
           <p className={css.emptyTitle}>No lists yet</p>

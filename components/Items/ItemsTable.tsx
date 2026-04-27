@@ -1,9 +1,12 @@
 "use client";
 
+import { ItemDTO } from "@/types/dto/item.dto";
 import ItemRow from "./ItemRow";
 import css from "./ItemsTable.module.css";
-
-export default function ItemsTable({ items }: any) {
+interface Props {
+  items: ItemDTO[];
+}
+export default function ItemsTable({ items }: Props) {
   return (
     <div className={css.table}>
       {/* HEADER */}
@@ -18,8 +21,8 @@ export default function ItemsTable({ items }: any) {
       </div>
 
       {/* ROWS */}
-      {items.map((item: any) => (
-        <ItemRow key={item._id} item={item} />
+      {items.map((item: ItemDTO) => (
+        <ItemRow key={item.id} item={item} />
       ))}
     </div>
   );

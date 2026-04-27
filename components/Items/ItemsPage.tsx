@@ -5,15 +5,27 @@ import css from "./ItemsPage.module.css";
 import ItemsTable from "./ItemsTable";
 import ItemsToolbar from "./ItemsToolbar";
 import WorkspaceMembers from "../WorkspaceMembers/WorkspaceMembers";
+import { ItemDTO } from "@/types/dto/item.dto";
+import { ListDTO } from "@/types/dto/list.dto";
+import { WorkspaceDTO } from "@/types/dto/workspace.dto";
+
+interface Props {
+  items: ItemDTO[];
+  list: ListDTO;
+  listId: string;
+  workspace: WorkspaceDTO;
+  workspaceId: string;
+  userRole: "owmer" | "admin" | "member";
+}
 
 export default function ItemsPage({
   items,
   list,
   listId,
-  user,
   workspaceId,
   workspace,
-}: any) {
+  userRole,
+}: Props) {
   const [filter, setFilter] = useState<"all" | "open" | "done">("all");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<"newest" | "oldest">("newest");
@@ -56,6 +68,7 @@ export default function ItemsPage({
         <WorkspaceMembers
           members={workspace.members}
           workspaceId={workspaceId}
+          userRole={userRole}
         />
       </div>
 
@@ -72,7 +85,7 @@ export default function ItemsPage({
       />
 
       {/* TABLE */}
-      <ItemsTable items={filteredItems} user={user} />
+      <ItemsTable items={filteredItems} />
     </div>
   );
 }

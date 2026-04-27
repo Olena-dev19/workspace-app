@@ -1,19 +1,27 @@
 import { Item } from "@/models/Item";
 import { unstable_cache } from "next/cache";
 import { Types } from "mongoose";
+import { mapItem } from "./mappers/item.mapper";
+import { ItemDTO } from "@/types/dto/item.dto";
+import { PopulatedItemtDB } from "@/types/db/items";
 
-export function getItemsByList(listId: string) {
-  return unstable_cache(
+export const getItemsByList = (listId: string): Promise<ItemDTO[]> =>
+  unstable_cache(
     async () => {
-      return Item.find({
+      if (!Types.ObjectId.isValid(listId)) {
+        return [];
+      }
+
+      const items = await Item.find({
         listId: new Types.ObjectId(listId),
       })
         .populate("createdBy", "name email")
-        .lean();
+        .lean<PopulatedItemtDB[]>();
+
+      return items.map(mapItem);
     },
-    ["items", listId],
+    ["list-items", listId],
     {
       tags: [`list-${listId}`],
     },
   )();
-}

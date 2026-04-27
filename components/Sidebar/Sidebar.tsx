@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import css from "./Sidebar.module.css";
 import Link from "next/link";
@@ -11,12 +10,6 @@ export default function Sidebar() {
 
   const currentFilter = searchParams.get("filter") || "all";
 
-  const [open, setOpen] = useState(true);
-
-  const toggleMenu = () => {
-    setOpen(!open);
-  };
-
   const handleFilter = (filter: string) => {
     router.push(`/workspace?filter=${filter}`);
   };
@@ -27,31 +20,27 @@ export default function Sidebar() {
         <LogoIcon />
         Workspace
       </Link>
-      <div className={css.menu} onClick={toggleMenu}>
-        Dashboard {open ? "●" : "○"}
-      </div>
+      <Link href={"/workspace"} className={css.menu}>
+        Dashboard
+      </Link>
 
-      {open && (
-        <div className={css.submenu}>
-          <div
-            className={`${css.item} ${
-              currentFilter === "my" ? css.active : ""
-            }`}
-            onClick={() => handleFilter("my")}
-          >
-            My workspaces
-          </div>
-
-          <div
-            className={`${css.item} ${
-              currentFilter === "joint" ? css.active : ""
-            }`}
-            onClick={() => handleFilter("joint")}
-          >
-            Joint workspaces
-          </div>
+      <div className={css.submenu}>
+        <div
+          className={`${css.item} ${currentFilter === "my" ? css.active : ""}`}
+          onClick={() => handleFilter("my")}
+        >
+          My workspaces
         </div>
-      )}
+
+        <div
+          className={`${css.item} ${
+            currentFilter === "joint" ? css.active : ""
+          }`}
+          onClick={() => handleFilter("joint")}
+        >
+          Joint workspaces
+        </div>
+      </div>
     </aside>
   );
 }

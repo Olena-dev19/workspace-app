@@ -14,7 +14,7 @@ export async function requireWorkspaceAccess(workspaceId: string) {
     throw new Error("Workspace not found");
   }
 
-  const isMember = isWorkspaceMember(workspace, user._id.toString());
+  const isMember = isWorkspaceMember(workspace, user.id.toString());
 
   if (!isMember) {
     throw new Error("Forbidden");

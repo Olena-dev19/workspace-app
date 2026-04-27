@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import css from "./CreateWorkspaceModal.module.css";
 import { createWorkspace } from "@/actions/workspace";
 import toast from "react-hot-toast";

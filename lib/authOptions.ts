@@ -45,9 +45,16 @@ export const authOptions: NextAuthOptions = {
 
   callbacks: {
     async session({ session, token }) {
-      if (token && session.user) {
-        session.user.id = token.id as string;
+      if (token?.id) {
+        const user = await User.findById(token.id);
+
+        if (user && session.user) {
+          session.user.id = user._id.toString();
+          session.user.name = user.name;
+          session.user.email = user.email;
+        }
       }
+
       return session;
     },
 

@@ -1,25 +1,35 @@
 "use client";
 
+import { WorkspaceMemberDTO } from "@/types/dto/workspace.dto";
 import InviteButton from "../InviteButton/InviteButton";
 import css from "./WorkspaceMembers.module.css";
+import { Role } from "@/types/workspace";
 
-export default function WorkspaceMembers({ members, workspaceId }: any) {
+interface Props {
+  members: WorkspaceMemberDTO[];
+  workspaceId: string;
+  userRole: Role;
+}
+export default function WorkspaceMembers({
+  members,
+  workspaceId,
+  userRole,
+}: Props) {
+  const canInvite = userRole === "owner" || userRole === "admin";
   return (
     <div className={css.wrapper}>
       {/* Invite */}
-      <InviteButton workspaceId={workspaceId} />
+      {canInvite && <InviteButton workspaceId={workspaceId} />}
 
       {/* Users */}
-      {members.map((m: any) => {
-        const user = m.userId;
-
+      {members.map((m) => {
         return (
           <div
-            key={user._id}
+            key={m.user.id}
             className={css.avatar}
-            title={user?.email || user?.name}
+            title={m.user?.email || m.user?.name}
           >
-            {(user?.name || user?.email)?.[0]?.toUpperCase()}
+            {(m.user?.name || m.user?.email)?.[0]?.toUpperCase()}
           </div>
         );
       })}

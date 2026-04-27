@@ -1,0 +1,21 @@
+.section {
+  margin-bottom: 20px;
+}
+.row {
+  display: grid;
+  grid-template-columns: 30px 1.6fr 2fr 120px 120px 40px;
+  padding: 10px 20px;
+  align-items: center;
+  border-top: 1px solid #f1f5f9;
+  transition: background 0.2s ease;
+}
+.row button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: #9ca3af;
+}
+
+.row button:hover {
+  color: #ef4444;
+}

@@ -49,3 +49,25 @@
   font-size: 14px;
   color: rgba(188, 184, 184, 0.821);
 }
+
+.settingsButton {
+  background: transparent;
+  color: rgb(74, 19, 18);
+  cursor: pointer;
+}
+
+.settingsButton:hover,
+.settingsButton:focus {
+  color: white;
+  stroke: rgb(74, 19, 18);
+}
+
+.editsWrapper {
+  display: flex;
+  gap: 20px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}

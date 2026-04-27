@@ -4,9 +4,10 @@ import LogoutButton from "@/components/LogoutButton/LogoutButton";
 import Sidebar from "@/components/Sidebar/Sidebar";
 import { Toaster } from "react-hot-toast";
 
-import Breadcrumbs from "@/components/Breadcrumbs/Breadcrumbs";
 import { authOptions } from "@/lib/authOptions";
 import Link from "next/link";
+import { getUserCached } from "@/lib/user";
+import { redirect } from "next/navigation";
 
 export default async function DashboardLayout({
   children,
@@ -14,8 +15,12 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  // const user = await getCurrentUser();
-  const userName = session?.user?.name || session?.user?.email || "User";
+
+  if (!session?.user?.id) {
+    redirect("/sign-in");
+  }
+  const user = await getUserCached(session.user.id);
+  const userName = user?.name || user?.email || "User";
   return (
     <div className={css.container}>
       <Toaster position="top-right" />
@@ -29,7 +34,7 @@ export default async function DashboardLayout({
       {/* Main */}
       <div className={css.main}>
         <header className={css.header}>
-          <Breadcrumbs />
+          <div />
           <div> {userName}</div>
           <LogoutButton />
         </header>

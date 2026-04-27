@@ -25,7 +25,7 @@ const InviteSchema = new Schema<InviteType>(
     },
     expiresAt: Date,
     uses: { type: Number, default: 0 },
-    maxUses: { type: Number, default: 10 }, // MVP: 10 використань
+    maxUses: { type: Number, default: 10 },
   },
   { timestamps: true },
 );
