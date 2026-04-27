@@ -50,8 +50,9 @@ export default async function WorkspacePage({ params }: Props) {
   if (!isMember) return notFound();
 
   const userRole = await getUserRole(workspace, user.id.toString());
+  const safeRole = (userRole ?? "member") as "owner" | "admin" | "member";
 
-  const canEdit = userRole === "owner" || userRole === "admin";
+  const canEdit = safeRole === "owner" || safeRole === "admin";
 
   return (
     <div>
@@ -66,7 +67,7 @@ export default async function WorkspacePage({ params }: Props) {
               <SettingsIcon />
             </Link>
           )}
-          <LeaveWorkspaceBtn userRole={userRole} workspaceId={workspace.id} />
+          <LeaveWorkspaceBtn userRole={safeRole} workspaceId={workspace.id} />
         </div>
       </div>
       <h1 className={css.title}>{workspace.name}</h1>
@@ -76,7 +77,7 @@ export default async function WorkspacePage({ params }: Props) {
           <WorkspaceMembers
             members={workspace.members}
             workspaceId={workspaceId}
-            userRole={userRole}
+            userRole={safeRole}
           />
         </Suspense>
 
@@ -88,7 +89,7 @@ export default async function WorkspacePage({ params }: Props) {
           <p className={css.emptyHint}>Create your first list to get started</p>
         </div>
       ) : (
-        <ListGrid lists={lists} userRole={userRole} workspaceId={workspaceId} />
+        <ListGrid lists={lists} userRole={safeRole} workspaceId={workspaceId} />
       )}
     </div>
   );

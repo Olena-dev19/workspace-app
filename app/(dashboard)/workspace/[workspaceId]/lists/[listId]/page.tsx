@@ -51,6 +51,7 @@ export default async function ItemPage({ params }: Props) {
   if (!workspace || !list) return notFound();
   const items = await getItemsByList(listId);
   const userRole = getUserRole(workspace, user.id);
+  const safeRole = (userRole ?? "member") as "owner" | "admin" | "member";
 
   return (
     <>
@@ -62,7 +63,7 @@ export default async function ItemPage({ params }: Props) {
           listId={listId}
           workspaceId={workspaceId}
           workspace={workspace}
-          userRole={userRole}
+          userRole={safeRole}
         />
       </Suspense>
     </>

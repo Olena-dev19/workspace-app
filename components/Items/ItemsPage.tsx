@@ -8,6 +8,7 @@ import WorkspaceMembers from "../WorkspaceMembers/WorkspaceMembers";
 import { ItemDTO } from "@/types/dto/item.dto";
 import { ListDTO } from "@/types/dto/list.dto";
 import { WorkspaceDTO } from "@/types/dto/workspace.dto";
+import type { Role } from "@/types/workspace";
 
 interface Props {
   items: ItemDTO[];
@@ -15,7 +16,7 @@ interface Props {
   listId: string;
   workspace: WorkspaceDTO;
   workspaceId: string;
-  userRole: "owmer" | "admin" | "member";
+  userRole: Role;
 }
 
 export default function ItemsPage({
