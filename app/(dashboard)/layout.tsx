@@ -2,6 +2,7 @@ import { getServerSession } from "next-auth";
 import css from "./layout.module.css";
 import LogoutButton from "@/components/LogoutButton/LogoutButton";
 import Sidebar from "@/components/Sidebar/Sidebar";
+import React, { Suspense } from "react";
 import { Toaster } from "react-hot-toast";
 
 import { authOptions } from "@/lib/authOptions";
@@ -25,7 +26,9 @@ export default async function DashboardLayout({
     <div className={css.container}>
       <Toaster position="top-right" />
       <aside className={css.sidebar}>
-        <Sidebar />
+        <Suspense fallback={<div>Loading...</div>}>
+          <Sidebar />
+        </Suspense>
         <Link href="/settings" className={css.settings}>
           Settings
         </Link>
